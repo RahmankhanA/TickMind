@@ -1,0 +1,2 @@
+appname = Ticmind
+slogan = Stay organized and get things done with our to-do app.
