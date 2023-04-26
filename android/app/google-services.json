@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "555613494381",
+    "project_id": "tickmind-712f6",
+    "storage_bucket": "tickmind-712f6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:555613494381:android:7d786a83b3854a5c447364",
+        "android_client_info": {
+          "package_name": "com.rahman.ticmind"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "555613494381-bfff43ocfbgujjfglm10e2uskcare0a7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rahman.ticmind",
+            "certificate_hash": "e6c95a1c77713636b325136dc768603b4e841d58"
+          }
+        },
+        {
+          "client_id": "555613494381-atjk7f4l0firtunrus57f646rn3o93kf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUCj7_p9ivO8E1fIslVWGOTLQNlsZrHOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "555613494381-atjk7f4l0firtunrus57f646rn3o93kf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,2 +1,4 @@
-appname = Ticmind
+appname = Tickmind
 slogan = Stay organized and get things done with our to-do app.
+
+hive adapter generator: flutter packages pub run build_runner build
