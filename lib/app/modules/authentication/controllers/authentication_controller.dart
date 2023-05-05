@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -57,12 +59,12 @@ class AuthenticationController extends GetxController {
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        log('No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided.');
+        log('Wrong password provided.');
       }
       else{
-        print(e);
+        log(e.toString());
       }
     }
     print(user);

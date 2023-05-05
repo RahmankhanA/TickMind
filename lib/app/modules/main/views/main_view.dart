@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ticmind/app/modules/main/views/category_details.dart';
 
 import '../controllers/main_controller.dart';
 
@@ -28,7 +31,7 @@ class MainView extends GetView<MainController> {
         child: Column(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height * 0.25,
+              height: MediaQuery.of(context).size.height * 0.17,
               width: double.maxFinite,
               decoration: BoxDecoration(
                 borderRadius:
@@ -52,19 +55,11 @@ class MainView extends GetView<MainController> {
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
                     ),
-                    // const SizedBox(
-                    //   height: 8,
-                    // ),
-                    GetBuilder(
-                      init: controller,
-                      initState: (_) {},
-                      builder: (_) {
-                        return Text(
-                          "${controller.taskList.length} Task",
+
+                    Obx(() => Text(
+                          "${controller.totalTodayTask.value} Task",
                           style: const TextStyle(fontSize: 15),
-                        );
-                      },
-                    ),
+                        )),
 
                     SizedBox(
                       width: 250.0,
@@ -90,8 +85,8 @@ class MainView extends GetView<MainController> {
                               backgroundColor: Colors.grey,
                               minHeight: 8.0,
                               value: .5,
-                              semanticsLabel: "50%",
-                              semanticsValue: "50%",
+                              // semanticsLabel: "50%",
+                              // semanticsValue: "50%",
                             ),
                           ),
                         ],
@@ -103,7 +98,7 @@ class MainView extends GetView<MainController> {
               ),
             ),
             const SizedBox(
-              height: 20,
+              height: 15,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -113,7 +108,9 @@ class MainView extends GetView<MainController> {
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.w600),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(()=>CategoryDetailsPage(category: "All", taskList: controller.taskList));
+                  },
                   child: const Text(
                     "See All",
                     style: TextStyle(fontSize: 18),
@@ -122,21 +119,30 @@ class MainView extends GetView<MainController> {
               ],
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.45,
+              height: MediaQuery.of(context).size.height * 0.52,
               child: GetBuilder(
                 init: controller,
                 initState: (_) {},
                 builder: (_) {
                   return ListView.builder(
-                    itemCount: controller.taskList.length,
+                    itemCount: controller.todayTaskList.length,
                     dragStartBehavior: DragStartBehavior.down,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     itemBuilder: (context, index) {
+                    
                       return Card(
                         child: ListTile(
-                          title: Text(controller.taskList[index].category),
+                          onTap: () {
+                            Get.to(() => CategoryDetailsPage(
+                                category:
+                                    controller.todayTaskList[index].keys.first,
+                                taskList: controller
+                                    .todayTaskList[index].values.first));
+                          },
+                          title:
+                              Text(controller.todayTaskList[index].keys.first),
                           subtitle: Text(
-                            "${controller.taskList[index].startTime} - ${controller.taskList[index].endTime}",
+                            "${controller.todayTaskList[index].values.first.first.startTime} - ${controller.todayTaskList[index].values.first.first.endTime}",
                           ),
                           trailing: const Icon(Icons.arrow_forward_ios),
                         ),
