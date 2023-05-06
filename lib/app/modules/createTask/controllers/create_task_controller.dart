@@ -82,16 +82,16 @@ class CreateTaskController extends GetxController {
       // categoryList = categoryBox.values as List<String>;
       for (String category in categoryBox.values) {
         categoryList.add(category);
-        log(category);
+        // log(category);
       }
     } else {
       categoryList = categoryList2;
     }
 // // categoryBox.deleteAt(2);
 //       log(categoryBox.values.length.toString());
-    log(categoryBox.values.toString());
-    log(categoryBox.keys.toString());
-    log(categoryBox.keys.length.toString());
+    // log(categoryBox.values.toString());
+    // log(categoryBox.keys.toString());
+    // log(categoryBox.keys.length.toString());
     update();
     // log(categoryList.toString());
   }

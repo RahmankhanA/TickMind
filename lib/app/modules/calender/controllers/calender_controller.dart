@@ -8,6 +8,7 @@ class CalenderController extends GetxController {
   DateTime selectedDay = DateTime.now();
   MainController mainController = Get.find<MainController>();
   List<Map<String, List<TaskModel>>> selectedDayTaskList = [];
+  List<DateTime> taskDayList=[]; // day where task is added
 
   @override
   void onInit() {
@@ -28,11 +29,12 @@ class CalenderController extends GetxController {
   //   update();
   // }
   void getTaskListOfSelectedDay({required DateTime day}) {
-    log(day.toString());
+    // log(day.toString());
     selectedDayTaskList.clear();
     DateTime today = DateTime.parse(day.toString().split(" ")[0]);
     for (TaskModel task in mainController.taskList) {
       // log(task.dueDate.toString());
+      taskDayList.add(task.dueDate);
       if (task.dueDate == today) {
         bool isCategoryExist = false;
         Map<String, List<TaskModel>> value = {};

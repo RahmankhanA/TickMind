@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ticmind/app/modules/main/views/category_details.dart';
+
 
 import '../controllers/main_controller.dart';
 
@@ -109,7 +109,8 @@ class MainView extends GetView<MainController> {
                 ),
                 TextButton(
                   onPressed: () {
-                    Get.to(()=>CategoryDetailsPage(category: "All", taskList: controller.taskList));
+                    // Get.to(()=>CategoryDetailsPage(category: "All", taskList: controller.taskList));
+                    Get.toNamed('./category-details', arguments: {'category':"All", 'taskList':controller.taskList});
                   },
                   child: const Text(
                     "See All",
@@ -129,15 +130,20 @@ class MainView extends GetView<MainController> {
                     dragStartBehavior: DragStartBehavior.down,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     itemBuilder: (context, index) {
-                    
+
                       return Card(
                         child: ListTile(
                           onTap: () {
-                            Get.to(() => CategoryDetailsPage(
-                                category:
-                                    controller.todayTaskList[index].keys.first,
-                                taskList: controller
-                                    .todayTaskList[index].values.first));
+                            // Get.to(() => CategoryDetailsPage(
+                            //     category:
+                            //         controller.todayTaskList[index].keys.first,
+                            //     taskList: controller
+                            //         .todayTaskList[index].values.first));
+
+                            Get.toNamed('./category-details', arguments: {
+                              'category': controller.todayTaskList[index].keys.first,
+                              'taskList': controller.todayTaskList[index].values.first
+                            });
                           },
                           title:
                               Text(controller.todayTaskList[index].keys.first),

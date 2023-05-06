@@ -46,8 +46,11 @@ class MainController extends GetxController {
       // log(task.dueDate.toString());
       if (task.dueDate == today) {
         totalTodayTask.value++;
+
         bool isCategoryExist = false;
+
         Map<String, List<TaskModel>> value = {};
+        
         for (Map<String, List<TaskModel>> element in todayTaskList) {
           if (element.keys.first == task.category) {
             isCategoryExist = true;

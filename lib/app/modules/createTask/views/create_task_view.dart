@@ -111,12 +111,48 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                         onTap: () => controller
                                             .selectedCategoryIndex
                                             .value = index,
-                                        onDoubleTap: () {
-                                          log("double tap");
-                                          controller.deleteCategory(
-                                              index: index,
-                                              category: controller
-                                                  .categoryList[index]);
+                                        // onDoubleTap: () {
+                                        //   log("double tap");
+                                        // controller.deleteCategory(
+                                        //     index: index,
+                                        //     category: controller
+                                        //         .categoryList[index]);
+                                        // },
+                                        onLongPress: () {
+                                          log("on long press");
+                                          showMenu(
+                                              context: context,
+                                              shape: BeveledRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                side: BorderSide(
+                                                    width: 0.2,
+                                                    color: Theme.of(context)
+                                                        .iconTheme
+                                                        .color!),
+                                              ),
+                                              position: RelativeRect.fromLTRB(
+                                                  Get.width * 0.4,
+                                                  Get.height * 0.4,
+                                                  Get.width * 0.4,
+                                                  Get.height * 0.4),
+                                              items: [
+                                                const PopupMenuItem(
+                                                  child: Text("Edit"),
+                                                ),
+                                                PopupMenuItem(
+                                                  child: const Text("Delete"),
+                                                  onTap: () =>
+                                                      controller.deleteCategory(
+                                                          index: index,
+                                                          category: controller
+                                                                  .categoryList[
+                                                              index]),
+                                                ),
+                                                const PopupMenuItem(
+                                                  child: Text("Info"),
+                                                ),
+                                              ]);
                                         },
                                         child: Text(
                                           controller.categoryList[index],
@@ -172,8 +208,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                       DateTime? pickedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(), //get today's date
-                          firstDate: DateTime(
-                              2000), //DateTime.now() - not to allow to choose before today.
+                          firstDate: DateTime.now(), //DateTime.now() - not to allow to choose before today.
                           lastDate: DateTime(2101));
                       // CalenderPicker(
                       //   DateTime.now(),
@@ -242,14 +277,11 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                 if (pickedTime != null) {
                                   // ignore: use_build_context_synchronously
                                   controller.startTimeController.text =
-                                      pickedTime.format(
-                                          Get.context!);
+                                      pickedTime.format(Get.context!);
                                 } else {
                                   print("Time is not selected");
                                 }
                               },
-
-
                             ),
                           ],
                         ),
@@ -268,13 +300,11 @@ class CreateTaskView extends GetView<CreateTaskController> {
                             const SizedBox(
                               height: 10,
                             ),
-
                             TextFormField(
                               controller: controller.endTimeController,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               readOnly: true,
-
                               decoration: InputDecoration(
                                   fillColor:
                                       Theme.of(context).scaffoldBackgroundColor,
@@ -303,16 +333,13 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                 );
 
                                 if (pickedTime != null) {
-
-                                  controller.endTimeController.text = pickedTime
-                                      .format(Get.context!);
+                                  controller.endTimeController.text =
+                                      pickedTime.format(Get.context!);
                                 } else {
                                   log("Time is not selected");
                                 }
                               },
-
                             ),
-
                           ],
                         ),
                       ),
