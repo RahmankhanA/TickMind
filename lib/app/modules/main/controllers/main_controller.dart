@@ -5,6 +5,8 @@ import 'package:ticmind/app/core/local_db/task_hive_model.dart';
 
 class MainController extends GetxController {
   List<TaskModel> taskList = [];
+  List<Map<String, List<TaskModel>>> todayTaskList = [];
+  RxInt totalTodayTask=0.obs;
 
   late var taskBox;
   @override
@@ -13,7 +15,8 @@ class MainController extends GetxController {
     super.onInit();
     // log(taskBox.values.toList().toString());
     //  taskList=   taskBox.values as List<TaskModel>;
-   fetchtask();
+    await fetchtask();
+    loadTodayTask();
   }
 
   @override
@@ -27,11 +30,45 @@ class MainController extends GetxController {
     super.onClose();
   }
 
-  void fetchtask() async{
-     var data = await taskBox.values.toList();
+  Future<void> fetchtask() async {
+    var data = await taskBox.values.toList();
     for (TaskModel element in data) {
       taskList.add(element);
     }
     update();
+  }
+
+  void loadTodayTask() {
+    totalTodayTask.value=0;
+    todayTaskList.clear();
+    DateTime today = DateTime.parse(DateTime.now().toString().split(" ")[0]);
+    for (TaskModel task in taskList) {
+      // log(task.dueDate.toString());
+      if (task.dueDate == today) {
+        totalTodayTask.value++;
+
+        bool isCategoryExist = false;
+
+        Map<String, List<TaskModel>> value = {};
+        
+        for (Map<String, List<TaskModel>> element in todayTaskList) {
+          if (element.keys.first == task.category) {
+            isCategoryExist = true;
+            value = element;
+          }
+        }
+        if (isCategoryExist) {
+          var index = todayTaskList.indexOf(value);
+          todayTaskList[index][task.category]!.add(task);
+        } else {
+          Map<String, List<TaskModel>> data = {
+            task.category:
+            [task]
+          } ;
+          todayTaskList.add(data);
+        }
+        // todayTaskList.add(task);
+      }
+    }
   }
 }

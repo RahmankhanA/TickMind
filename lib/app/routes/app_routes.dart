@@ -11,6 +11,7 @@ abstract class Routes {
   static const HISTORY = _Paths.HISTORY;
   static const PROFILE = _Paths.PROFILE;
   static const AUTHENTICATION = _Paths.AUTHENTICATION;
+  static const CATEGORY_DETAILS = _Paths.CATEGORY_DETAILS;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const HISTORY = '/history';
   static const PROFILE = '/profile';
   static const AUTHENTICATION = '/authentication';
+  static const CATEGORY_DETAILS = '/category-details';
 }

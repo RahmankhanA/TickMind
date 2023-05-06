@@ -55,46 +55,117 @@ class CreateTaskView extends GetView<CreateTaskController> {
                           borderSide: BorderSide(
                               color: Theme.of(context).iconTheme.color!),
                         ),
-                        hintText: "UI Design"),
+                        hintText: "Enter Task Name"),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  const TitleText(title: 'Category'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const TitleText(title: 'Category'),
+                      AddCategory(
+                        controller: controller,
+                      )
+                    ],
+                  ),
                   const SizedBox(
                     height: 10,
                   ),
                   SizedBox(
                     height: 50,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: controller.categoryList.length,
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(width: 10);
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        return Obx(() => Card(
-                              // color: Theme.of(context).primaryColor,
-                              color: controller.selectedCategoryIndex.value ==
-                                      index
-                                  ? Theme.of(context).primaryColor
-                                  : Theme.of(context).cardColor,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20.0, vertical: 8.0),
-                                child: Center(
-                                    child: GestureDetector(
-                                  onTap: () => controller
-                                      .selectedCategoryIndex.value = index,
-                                  child: Text(
-                                    controller.categoryList[index],
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                )),
+                    child: GetBuilder(
+                      init: controller,
+                      initState: (_) {},
+                      builder: (_) {
+                        return Visibility(
+                          replacement: const Center(
+                            child: Text(
+                              "Add Category First",
+                              style: TextStyle(
+                                fontSize: 20,
                               ),
-                            ));
+                            ),
+                          ),
+                          visible: controller.categoryList.isNotEmpty,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: controller.categoryList.length,
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return const SizedBox(width: 10);
+                            },
+                            itemBuilder: (BuildContext context, int index) {
+                              return Obx(() => Card(
+                                    // color: Theme.of(context).primaryColor,
+                                    color: controller
+                                                .selectedCategoryIndex.value ==
+                                            index
+                                        ? Theme.of(context).primaryColor
+                                        : Theme.of(context).cardColor,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 20.0, vertical: 8.0),
+                                      child: Center(
+                                          child: GestureDetector(
+                                        onTap: () => controller
+                                            .selectedCategoryIndex
+                                            .value = index,
+                                        // onDoubleTap: () {
+                                        //   log("double tap");
+                                        // controller.deleteCategory(
+                                        //     index: index,
+                                        //     category: controller
+                                        //         .categoryList[index]);
+                                        // },
+                                        onLongPress: () {
+                                          log("on long press");
+                                          showMenu(
+                                              context: context,
+                                              shape: BeveledRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(5),
+                                                side: BorderSide(
+                                                    width: 0.2,
+                                                    color: Theme.of(context)
+                                                        .iconTheme
+                                                        .color!),
+                                              ),
+                                              position: RelativeRect.fromLTRB(
+                                                  Get.width * 0.4,
+                                                  Get.height * 0.4,
+                                                  Get.width * 0.4,
+                                                  Get.height * 0.4),
+                                              items: [
+                                                const PopupMenuItem(
+                                                  child: Text("Edit"),
+                                                ),
+                                                PopupMenuItem(
+                                                  child: const Text("Delete"),
+                                                  onTap: () =>
+                                                      controller.deleteCategory(
+                                                          index: index,
+                                                          category: controller
+                                                                  .categoryList[
+                                                              index]),
+                                                ),
+                                                const PopupMenuItem(
+                                                  child: Text("Info"),
+                                                ),
+                                              ]);
+                                        },
+                                        child: Text(
+                                          controller.categoryList[index],
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                        ),
+                                      )),
+                                    ),
+                                  ));
+                            },
+                          ),
+                        );
                       },
                     ),
                   ),
@@ -134,38 +205,10 @@ class CreateTaskView extends GetView<CreateTaskController> {
                       hintText: "Select Date",
                     ),
                     onTap: () async {
-                      // showDialog(
-                      //   context: context,
-                      //   builder: (context) {
-                      //     return AlertDialog(
-                      //       content: SizedBox(
-                      //         height: 100,
-                      //         width: MediaQuery.of(context).size.width,
-                      //         child: CalenderPicker(
-                      //           DateTime.now(),
-                      //           initialSelectedDate: DateTime.now(),
-                      //           selectionColor: Colors.black,
-                      //           selectedTextColor: Colors.white,
-                      //           // monthTextStyle: ,
-                      //           monthTextStyle: const TextStyle(
-                      //               fontSize: 20,
-                      //               color: Colors.red,
-                      //               backgroundColor: Colors.blue),
-                      //           onDateChange: (date) {
-                      //             // New date selected
-                      //             controller.dateController.text =
-                      //                 date.toString();
-                      //           },
-                      //         ),
-                      //       ),
-                      //     );
-                      //   },
-                      // );'
                       DateTime? pickedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(), //get today's date
-                          firstDate: DateTime(
-                              2000), //DateTime.now() - not to allow to choose before today.
+                          firstDate: DateTime.now(), //DateTime.now() - not to allow to choose before today.
                           lastDate: DateTime(2101));
                       // CalenderPicker(
                       //   DateTime.now(),
@@ -178,7 +221,6 @@ class CreateTaskView extends GetView<CreateTaskController> {
                       // );
                       controller.dateController.text =
                           pickedDate.toString().split(" ")[0];
-                      log("calender clicked");
                     },
                   ),
                   const SizedBox(
@@ -224,8 +266,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                     Icons.keyboard_arrow_down,
                                     color: Theme.of(context).primaryColor,
                                   ),
-                                  hintText:
-                                      "${TimeOfDay.now().hour}: ${TimeOfDay.now().minute}"),
+                                  hintText: "Start Time"),
                               onTap: () async {
                                 TimeOfDay? pickedTime = await showTimePicker(
                                   helpText: "Select Start Time",
@@ -236,25 +277,11 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                 if (pickedTime != null) {
                                   // ignore: use_build_context_synchronously
                                   controller.startTimeController.text =
-                                      pickedTime
-                                          .format(context); //output 10:51 PM
-                                  // DateTime parsedTime = DateFormat.jm().parse(
-                                  //     pickedTime.format(context).toString());
-                                  // //converting to DateTime so that we can further format on different pattern.
-                                  // print(
-                                  //     parsedTime); //output 1970-01-01 22:53:00.000
-                                  // String formattedTime =
-                                  //     DateFormat('HH:mm:ss').format(parsedTime);
-                                  // print(formattedTime); //output 14:59:00
-                                  //DateFormat() is from intl package, you can format the time on any pattern you need.
+                                      pickedTime.format(Get.context!);
                                 } else {
                                   print("Time is not selected");
                                 }
                               },
-
-                              // maxLines: 10,
-                              // minLines: 2,
-                              // maxLength: 200,
                             ),
                           ],
                         ),
@@ -273,15 +300,11 @@ class CreateTaskView extends GetView<CreateTaskController> {
                             const SizedBox(
                               height: 10,
                             ),
-
                             TextFormField(
                               controller: controller.endTimeController,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               readOnly: true,
-                              // validator: (value) =>
-                              //     CustomValidation.descriptionValidation(
-                              //         value: value!, fieldName: "description"),
                               decoration: InputDecoration(
                                   fillColor:
                                       Theme.of(context).scaffoldBackgroundColor,
@@ -301,8 +324,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                     Icons.keyboard_arrow_down,
                                     color: Theme.of(context).primaryColor,
                                   ),
-                                  hintText:
-                                      "${TimeOfDay.now().hour}: ${TimeOfDay.now().minute}"),
+                                  hintText: "End Time"),
                               onTap: () async {
                                 TimeOfDay? pickedTime = await showTimePicker(
                                   helpText: "Select End Time",
@@ -311,74 +333,13 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                 );
 
                                 if (pickedTime != null) {
-                                  // ignore: use_build_context_synchronously
-                                  controller.endTimeController.text = pickedTime
-                                      .format(context); //output 10:51 PM
-                                  // DateTime parsedTime = DateFormat.jm().parse(
-                                  //     pickedTime.format(context).toString());
-                                  // //converting to DateTime so that we can further format on different pattern.
-                                  // print(
-                                  //     parsedTime); //output 1970-01-01 22:53:00.000
-                                  // String formattedTime =
-                                  //     DateFormat('HH:mm:ss').format(parsedTime);
-                                  // print(formattedTime); //output 14:59:00
-                                  //DateFormat() is from intl package, you can format the time on any pattern you need.
+                                  controller.endTimeController.text =
+                                      pickedTime.format(Get.context!);
                                 } else {
-                                  print("Time is not selected");
+                                  log("Time is not selected");
                                 }
                               },
-
-                              // maxLines: 10,
-                              // minLines: 2,
-                              // maxLength: 200,
                             ),
-
-                            // DropdownButtonFormField(
-                            //   icon: Icon(
-                            //     Icons.keyboard_arrow_down,
-                            //     color: Theme.of(context).primaryColor,
-                            //   ),
-                            //   decoration: InputDecoration(
-                            //     fillColor:
-                            //         Theme.of(context).scaffoldBackgroundColor,
-                            //     border: OutlineInputBorder(
-                            //       borderRadius: BorderRadius.circular(15),
-                            //       borderSide: BorderSide(
-                            //           color:
-                            //               Theme.of(context).iconTheme.color!),
-                            //     ),
-                            //     focusedBorder: OutlineInputBorder(
-                            //       borderRadius: BorderRadius.circular(15),
-                            //       borderSide: BorderSide(
-                            //           color:
-                            //               Theme.of(context).iconTheme.color!),
-                            //     ),
-                            //     enabledBorder: OutlineInputBorder(
-                            //       borderRadius: BorderRadius.circular(15),
-                            //       borderSide: BorderSide(
-                            //           color:
-                            //               Theme.of(context).iconTheme.color!),
-                            //     ),
-                            //   ),
-                            //   items: const [
-                            //     DropdownMenuItem(
-                            //       value: 2,
-                            //       child: Text("4"),
-                            //     ),
-                            //     DropdownMenuItem(
-                            //       value: 3,
-                            //       child: Text("5"),
-                            //     ),
-                            //     DropdownMenuItem(
-                            //       value: 12,
-                            //       child: Text("6"),
-                            //     ),
-                            //   ],
-                            //   onChanged: (value) {
-                            //     controller.endTimeController.text =
-                            //         value.toString();
-                            //   },
-                            // )
                           ],
                         ),
                       ),
@@ -451,11 +412,17 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                     controller.selectedCategoryIndex.value],
                               );
 
-                              controller.addUser(task: task);
+                              controller.addTask(task: task);
                             }
                           }
                         },
-                        child: const Text("Create Task")),
+                        child: const Text(
+                          "Create Task",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )),
                   ),
                   const SizedBox(
                     height: 30,
@@ -467,5 +434,97 @@ class CreateTaskView extends GetView<CreateTaskController> {
         ),
       ),
     );
+  }
+}
+
+class AddCategory extends StatelessWidget {
+  const AddCategory({
+    super.key,
+    required this.controller,
+  });
+
+  final CreateTaskController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton(
+        onPressed: () {
+          String inputText = '';
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text("Add Category"),
+                content: Form(
+                  key: controller.addCategoryFormKey,
+                  child: TextFormField(
+                    autofocus: true,
+                    decoration: InputDecoration(
+                        fillColor: Theme.of(context).scaffoldBackgroundColor,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Theme.of(context).iconTheme.color!),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                              color: Theme.of(context).iconTheme.color!),
+                        ),
+                        hintText: "Enter Category"),
+                    onChanged: (value) {
+                      inputText = value;
+                    },
+                    validator: (value) {
+                      if (inputText == '' || inputText.isEmpty) {
+                        return 'category name required';
+                      }
+                      return null;
+                    },
+                    onFieldSubmitted: (value) {
+                      if (controller.addCategoryFormKey.currentState!
+                          .validate()) {
+                        controller.addCategory(
+                            category: inputText.capitalizeFirst.toString());
+                        Get.back();
+                      }
+                    },
+                  ),
+                ),
+                actions: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                            minimumSize: Size(Get.width * 0.3, 40)),
+                        onPressed: () => Get.back(),
+                        child: const Text("Cancel"),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      ElevatedButton(
+                          style: OutlinedButton.styleFrom(
+                              minimumSize: Size(Get.width * 0.3, 40)),
+                          onPressed: () {
+                            if (controller.addCategoryFormKey.currentState!
+                                .validate()) {
+                              controller.addCategory(
+                                  category:
+                                      inputText.capitalizeFirst.toString());
+                              Get.back();
+                            }
+                          },
+                          child: const Text("Add")),
+                    ],
+                  )
+                ],
+              );
+            },
+          );
+        },
+        child: const Text("Add Category"));
   }
 }

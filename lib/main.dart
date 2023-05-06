@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,7 @@ import 'package:ticmind/app/modules/home/controllers/home_controller.dart';
 
 import 'app/routes/app_pages.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
@@ -71,8 +70,6 @@ void main() async{
 // If you do not have a themeMode switch, uncomment this line
 // to let the device system mode control the theme mode:
 // themeMode: ThemeMode.system,
-
-
 
       // Use dark or light theme based on system setting.
       themeMode: ThemeMode.system,
