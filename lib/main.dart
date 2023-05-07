@@ -33,7 +33,7 @@ void main() async {
         surfaceMode: FlexSurfaceMode.levelSurfacesLowScaffold,
         blendLevel: 9,
         swapColors: true,
-        appBarElevation: 0,
+        appBarElevation: 1.8,
         subThemesData: const FlexSubThemesData(
           useFlutterDefaults: true,
           elevatedButtonRadius: 20.0,

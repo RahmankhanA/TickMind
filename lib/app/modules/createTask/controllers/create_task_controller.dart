@@ -3,12 +3,16 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:ticmind/app/core/local_db/task_hive_model.dart';
+import 'package:ticmind/app/core/services/notification_service.dart';
 import 'package:ticmind/app/modules/main/controllers/main_controller.dart';
 // import 'package:ticmind/app/modules/createTask/models/task_model.dart' as Task;
 
 class CreateTaskController extends GetxController {
   MainController mainController = Get.find<MainController>();
+  // CategoryDetailsController categoryDetailsController =
+  //     Get.find<CategoryDetailsController>();
   final formKey = GlobalKey<FormState>();
   final addCategoryFormKey = GlobalKey<FormState>();
   TextEditingController taskNameController = TextEditingController();
@@ -20,7 +24,7 @@ class CreateTaskController extends GetxController {
   late var taskBox;
   late var categoryBox;
   var selectedCategoryIndex = 19999.obs;
-
+  bool isUpdate = false;
   List<String> categoryList = [];
   List<String> categoryList2 = [
     'Professional',
@@ -33,23 +37,42 @@ class CreateTaskController extends GetxController {
     // 'Maintenance',
     // 'Miscellaneous',
   ];
+
+  late TaskModel task;
+  NotificationService notificationService = NotificationService();
+
   @override
   void onInit() async {
+    notificationService.initializeNotifications();
     taskBox = await Hive.openBox('taskBox');
     categoryBox = await Hive.openBox('category');
     super.onInit();
 
-    initializeCategory();
+    await initializeCategory();
+    try {
+      task = Get.arguments['task'];
+      isUpdate = true;
+      taskNameController.text = task.taskName;
+      descriptionController.text = task.description;
+      dateController.text = task.dueDate.toString().split(' ').first;
+      startTimeController.text = task.startTime;
+      endTimeController.text = task.endTime;
+      selectedCategoryIndex.value = categoryList.indexOf(task.category);
+      log(categoryList.indexOf(task.category).toString());
+      log(task.category);
+    } catch (error) {
+      log(error.toString());
+    }
   }
 
   @override
   void onClose() {
     // TODO: implement onClose
     // to free up space
-    Hive.box('taskBox').compact();
+    isUpdate ? null : Hive.box('taskBox').compact();
     Hive.box('category').compact();
     // close all the open boxes before closing the page.
-    Hive.close();
+    isUpdate ? null : Hive.close();
     taskNameController.dispose();
     dateController.dispose();
     descriptionController.dispose();
@@ -63,13 +86,37 @@ class CreateTaskController extends GetxController {
     await taskBox.put(task.uuid, task);
 
     // taskBox.pzz
-    mainController.taskList.add(task);
+    isUpdate
+        ? await mainController.fetchtask()
+        : mainController.taskList.add(task);
     mainController.loadTodayTask();
     mainController.update();
+    // set notification
+    int id = int.parse(task.uuid!.split('-').first, radix: 16);
+    String formated24HourTime = convertTimeTo24HourFormat(task.startTime);
+    DateTime notificationTime = task.dueDate.copyWith(
+        hour: int.parse(formated24HourTime.split(':').first),
+        minute: int.parse(formated24HourTime.split(':')[1]));
+    notificationService.scheduleNotification(
+        title: task.taskName,
+        body: task.description,
+        time: notificationTime,
+        id: id);
+
+        log("notification scheduled at $notificationTime");
     Get.back();
   }
 
-  void initializeCategory() async {
+  String convertTimeTo24HourFormat(String time) {
+    final format = DateFormat.jm(); // Create 12-hour time format
+    final dateTime = format.parse(time); // Parse time string to DateTime object
+    final newFormat = DateFormat('HH:mm'); // Create 24-hour time format
+    final formattedTime =
+        newFormat.format(dateTime); // Format time to 24-hour format
+    return formattedTime;
+  }
+
+  Future<void> initializeCategory() async {
     // categoryBox.clear();
     //  276228
 

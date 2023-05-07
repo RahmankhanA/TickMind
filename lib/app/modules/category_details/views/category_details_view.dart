@@ -38,7 +38,8 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
                         height: 55,
                         child: TextFormField(
                           decoration: InputDecoration(
-                              fillColor: Theme.of(context).scaffoldBackgroundColor,
+                              fillColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
                               focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(
                                     color: Theme.of(context).iconTheme.color!),
@@ -59,7 +60,7 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
                           },
                         ),
                       ),
-                       const SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                     ],
@@ -67,146 +68,149 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
                 );
               },
             ),
-            
 
             Flexible(
-              child: Stack(
-                children: [
-                  GetBuilder(
-                    init: controller,
-                    initState: (_) {},
-                    builder: (_) {
-                      return NotificationListener<ScrollNotification>(
-                        onNotification: (notification) =>
-                            controller.listenScrollNotification(
-                                scrollNotification: notification),
-                        child: ListView.separated(
-                          controller: controller.scrollController,
-                          itemCount: controller.taskListDuplicate.length,
-                          separatorBuilder: (context, index) => const SizedBox(
-                            height: 10,
+              child: GetBuilder(
+                init: controller,
+                initState: (_) {},
+                builder: (_) {
+                  return NotificationListener<ScrollNotification>(
+                    onNotification: (notification) =>
+                        controller.listenScrollNotification(
+                            scrollNotification: notification),
+                    child: ListView.separated(
+                      controller: controller.scrollController,
+                      itemCount: controller.taskListDuplicate.length,
+                      separatorBuilder: (context, index) => const SizedBox(
+                        height: 10,
+                      ),
+                      itemBuilder: (context, index) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
                           ),
-                          itemBuilder: (context, index) {
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(15.0),
-                                child: Column(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              children: [
+                                Text(
+                                  controller.taskListDuplicate[index].taskName,
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      decoration: controller
+                                              .taskListDuplicate[index]
+                                              .isCompleted
+                                          ? TextDecoration.lineThrough
+                                          : null),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
+                                    const Text(
+                                      "Time Frame",
+                                      style: TextStyle(fontSize: 20),
+                                    ),
                                     Text(
-                                      controller
-                                          .taskListDuplicate[index].taskName,
-                                      style: const TextStyle(fontSize: 22),
+                                      "${controller.taskListDuplicate[index].startTime} - ${controller.taskListDuplicate[index].startTime}",
+                                      style: const TextStyle(fontSize: 16),
                                     ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text(
-                                          "Time Frame",
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                        Text(
-                                          "${controller.taskListDuplicate[index].startTime} - ${controller.taskListDuplicate[index].startTime}",
-                                          style: const TextStyle(fontSize: 16),
-                                        ),
-                                      ],
-                                    ),
-                                    Visibility(
-                                      visible: controller.category == 'All',
-                                      child: Column(
+                                  ],
+                                ),
+                                Visibility(
+                                  visible: controller.category == 'All',
+                                  child: Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          const SizedBox(
-                                            height: 5,
+                                          const Text(
+                                            "Date",
+                                            style: TextStyle(fontSize: 20),
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              const Text(
-                                                "Date",
-                                                style: TextStyle(fontSize: 20),
-                                              ),
-                                              Text(
-                                                controller
-                                                    .taskListDuplicate[index]
-                                                    .dueDate
-                                                    .toString()
-                                                    .split(" ")
-                                                    .first
-                                                    .replaceAll("-", "/"),
-                                                style: const TextStyle(
-                                                    fontSize: 16),
-                                              ),
-                                            ],
+                                          Text(
+                                            controller.taskListDuplicate[index]
+                                                .dueDate
+                                                .toString()
+                                                .split(" ")
+                                                .first
+                                                .replaceAll("-", "/"),
+                                            style:
+                                                const TextStyle(fontSize: 16),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      "Description: ${controller.taskListDuplicate[index].description.trim()}",
-                                      style: const TextStyle(fontSize: 16),
-                                    ),
-                                    const SizedBox(
-                                      height: 15,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        OutlinedButton.icon(
-                                            style: OutlinedButton.styleFrom(
-                                                minimumSize:
-                                                    Size(Get.width * 0.4, 40)),
-                                            onPressed: () {},
-                                            icon: const Icon(Icons.edit),
-                                            label: const Text(
-                                              "Edit Task",
-                                              style: TextStyle(fontSize: 18),
-                                            )),
-                                        OutlinedButton.icon(
-                                            style: OutlinedButton.styleFrom(
-                                                minimumSize:
-                                                    Size(Get.width * 0.4, 40)),
-                                            onPressed: () {},
-                                            icon: const Icon(Icons.done),
-                                            label: const Text(
-                                              "Complete",
-                                              style: TextStyle(fontSize: 18),
-                                            )),
-                                      ],
-                                    )
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: ElevatedButton(
-                      style: OutlinedButton.styleFrom(
-                          minimumSize: Size(Get.width * 0.6, 50)),
-                      onPressed: () => Get.offNamed('./create-task'),
-                      // icon: const Icon(Icons.add,size: 25,),
-                      child: const Text(
-                        "Add Task",
-                        style: TextStyle(fontSize: 20),
-                      ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  "Description: ${controller.taskListDuplicate[index].description.trim()}",
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    OutlinedButton.icon(
+                                        style: OutlinedButton.styleFrom(
+                                            minimumSize:
+                                                Size(Get.width * 0.4, 40)),
+                                        onPressed:controller.taskListDuplicate[index]
+                                                  .isCompleted?null: () {
+                                          Get.toNamed('./create-task', arguments: {'task':controller.taskListDuplicate[index]});
+                                        },
+                                        icon: const Icon(Icons.edit),
+                                        label: const Text(
+                                          "Edit Task",
+                                          style: TextStyle(fontSize: 18),
+                                        )),
+                                    OutlinedButton.icon(
+                                        style: OutlinedButton.styleFrom(
+                                            minimumSize:
+                                                Size(Get.width * 0.4, 40)),
+                                        onPressed: () {
+                                          controller.taskListDuplicate[index]
+                                                  .isCompleted
+                                              ? controller.unCompleteTask(
+                                                  index: index)
+                                              : controller.completeTask(
+                                                  index: index);
+                                        },
+                                        icon: Icon(controller
+                                                .taskListDuplicate[index]
+                                                .isCompleted
+                                            ? Icons.close
+                                            : Icons.check),
+                                        label: Text(
+                                          controller.taskListDuplicate[index]
+                                                  .isCompleted
+                                              ? "Uncomplete"
+                                              : "Complete",
+                                          style: const TextStyle(fontSize: 18),
+                                        )),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  )
-                ],
+                  );
+                },
               ),
             ),
           ],

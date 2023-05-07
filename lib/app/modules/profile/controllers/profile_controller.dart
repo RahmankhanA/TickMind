@@ -7,6 +7,7 @@ class ProfileController extends GetxController {
   void onInit() {
     super.onInit();
     //Listen to Auth State changes
+
     FirebaseAuth.instance
         .authStateChanges()
         .listen((event) => updateUserState(event));
@@ -14,6 +15,18 @@ class ProfileController extends GetxController {
 
   updateUserState(event) {
     user = event;
+    // user?.updateDisplayName("Abdul Rahaman");
     update();
+  }
+
+  void updateUserProfile(){
+    /*
+    for forgot password
+    */
+    // FirebaseAuth.instance.sendPasswordResetEmail(email: email)
+    // FirebaseAuth.instance.confirmPasswordReset(code: code, newPassword: newPassword)
+
+    // FirebaseAuth.instance.currentUser
+
   }
 }

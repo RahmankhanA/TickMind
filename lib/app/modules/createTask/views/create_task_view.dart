@@ -19,9 +19,9 @@ class CreateTaskView extends GetView<CreateTaskController> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Create New Task',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
+          title: Text(
+            controller.isUpdate ? 'Update Task' : 'Create New Task',
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
           ),
           centerTitle: true,
         ),
@@ -42,7 +42,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) => CustomValidation.basicValidation(
                         value: value!, fieldName: "Task Name"),
-                    maxLength: 25,
+                    maxLength: 50,
                     decoration: InputDecoration(
                         fillColor: Theme.of(context).scaffoldBackgroundColor,
                         focusedBorder: OutlineInputBorder(
@@ -180,7 +180,8 @@ class CreateTaskView extends GetView<CreateTaskController> {
                     controller: controller.dateController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
-                      if (controller.dateController.text == 'null') {
+                      if (controller.dateController.text == 'null' ||
+                          controller.dateController.text == '') {
                         return "date is Required";
                       }
                       return null;
@@ -208,7 +209,8 @@ class CreateTaskView extends GetView<CreateTaskController> {
                       DateTime? pickedDate = await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(), //get today's date
-                          firstDate: DateTime.now(), //DateTime.now() - not to allow to choose before today.
+                          firstDate: DateTime
+                              .now(), //DateTime.now() - not to allow to choose before today.
                           lastDate: DateTime(2101));
                       // CalenderPicker(
                       //   DateTime.now(),
@@ -397,7 +399,9 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                   backgroundColor: Theme.of(context).cardColor);
                             } else {
                               TaskModel task = TaskModel(
-                                uuid: const Uuid().v4(),
+                                uuid: controller.isUpdate
+                                    ? controller.task.uuid
+                                    : const Uuid().v4(),
                                 taskName: controller.taskNameController.text,
                                 description:
                                     controller.descriptionController.text,
@@ -411,14 +415,13 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                 category: controller.categoryList[
                                     controller.selectedCategoryIndex.value],
                               );
-
                               controller.addTask(task: task);
                             }
                           }
                         },
-                        child: const Text(
-                          "Create Task",
-                          style: TextStyle(
+                        child: Text(
+                          controller.isUpdate ? 'Update Task' : "Create Task",
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
                           ),

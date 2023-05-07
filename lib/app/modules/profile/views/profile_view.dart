@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/profile_controller.dart';
 
@@ -72,37 +76,67 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
               ),
-              const ListTile(
-                title: Text("Share App With Friends"),
-                leading: Icon(
+              ListTile(
+                onTap: () {
+                  Share.share(
+                      'check out my website https://play.google.com/store/apps/details?id=com.rahman.ticmind',
+                      subject: 'Look what I made!');
+                },
+                title: const Text("Share App With Friends"),
+                leading: const Icon(
                   Icons.share,
                   color: Colors.blue,
                 ),
-                trailing: Icon(Icons.arrow_forward_ios),
+                trailing: const Icon(Icons.arrow_forward_ios),
               ),
-              const ListTile(
-                title: Text("Rate This App"),
-                leading: Icon(
+              ListTile(
+                onTap: () async {
+                  Uri url = Uri.parse(
+                      'https://play.google.com/store/apps/details?id=com.rahman.ticmind');
+                  if (await canLaunchUrl(url)) {
+                    launchUrl(url,
+                        mode: LaunchMode.externalNonBrowserApplication);
+                  }
+                },
+                title: const Text("Rate This App"),
+                leading: const Icon(
                   Icons.reviews_rounded,
                   color: Colors.blue,
                 ),
-                trailing: Icon(Icons.arrow_forward_ios),
+                trailing: const Icon(Icons.arrow_forward_ios),
               ),
-              const ListTile(
-                title: Text("Our Other Apps"),
-                leading: Icon(
+              ListTile(
+                onTap: () async {
+                  log("our other apps");
+                  Uri url = Uri.parse(
+                      'https://play.google.com/store/apps/dev?id=7983241434233494489');
+                  if (await canLaunchUrl(url)) {
+                    launchUrl(url,
+                        mode: LaunchMode.externalNonBrowserApplication);
+                  }
+                },
+                title: const Text("Our Other Apps"),
+                leading: const Icon(
                   Icons.apps,
                   color: Colors.blue,
                 ),
-                trailing: Icon(Icons.arrow_forward_ios),
+                trailing: const Icon(Icons.arrow_forward_ios),
               ),
-              const ListTile(
-                title: Text("Setting"),
-                leading: Icon(
+              ListTile(
+                onTap: () async {
+                  Uri url = Uri.parse('https://google.com');
+                  if (await canLaunchUrl(url)) {
+                    launchUrl(
+                      url,
+                    );
+                  }
+                },
+                title: const Text("Setting"),
+                leading: const Icon(
                   Icons.settings,
-                  // color: Colors.red,
+                  
                 ),
-                trailing: Icon(Icons.arrow_forward_ios),
+                trailing: const Icon(Icons.arrow_forward_ios),
               ),
               const ListTile(
                 title: Text("Logout"),
@@ -112,37 +146,6 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 trailing: Icon(Icons.arrow_forward_ios),
               ),
-              // ProfileMenuWidget(
-              //     title: "Information",
-              //     icon: LineAwesomeIcons.info,
-              //     onPress: () {}),
-              // ProfileMenuWidget(
-              //     title: "Logout",
-              //     icon: LineAwesomeIcons.alternate_sign_out,
-              //     textColor: Colors.red,
-              //     endIcon: false,
-              //     onPress: () {
-              //       Get.defaultDialog(
-              //         title: "LOGOUT",
-              //         titleStyle: const TextStyle(fontSize: 20),
-              //         content: const Padding(
-              //           padding: EdgeInsets.symmetric(vertical: 15.0),
-              //           child: Text("Are you sure, you want to Logout?"),
-              //         ),
-              //         confirm: Expanded(
-              //           child: ElevatedButton(
-              //             onPressed: () {},
-              //             //     AuthenticationRepository.instance.logout(),
-              //             style: ElevatedButton.styleFrom(
-              //                 backgroundColor: Colors.redAccent,
-              //                 side: BorderSide.none),
-              //             child: const Text("Yes"),
-              //           ),
-              //         ),
-              //         cancel: OutlinedButton(
-              //             onPressed: () => Get.back(), child: const Text("No")),
-              //       );
-              //     }),
             ],
           ),
         ),

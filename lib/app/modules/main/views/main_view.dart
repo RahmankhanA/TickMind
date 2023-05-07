@@ -1,9 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 
 import '../controllers/main_controller.dart';
 
@@ -14,6 +11,7 @@ class MainView extends GetView<MainController> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home '),
+        // elevation: 5,
         centerTitle: true,
         actions: const [
           Padding(
@@ -68,9 +66,13 @@ class MainView extends GetView<MainController> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: const [
-                              Text("Progress"),
-                              Text("50%"),
+                            children: [
+                              const Text("Progress"),
+                              Obx(() => Text(controller
+                                          .todayCompletedTask.value ==
+                                      0
+                                  ? '0%'
+                                  : "${(controller.todayCompletedTask.value / controller.totalTodayTask.value * 100).round()}%")),
                             ],
                           ),
                           const SizedBox(
@@ -79,14 +81,19 @@ class MainView extends GetView<MainController> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(
                                 10), // set the border radius
-                            child: const LinearProgressIndicator(
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.blue),
-                              backgroundColor: Colors.grey,
-                              minHeight: 8.0,
-                              value: .5,
-                              // semanticsLabel: "50%",
-                              // semanticsValue: "50%",
+                            child: Obx(
+                              () => LinearProgressIndicator(
+                                valueColor: const AlwaysStoppedAnimation<Color>(
+                                    Colors.blue),
+                                backgroundColor: Colors.grey,
+                                minHeight: 8.0,
+                                value: controller.todayCompletedTask.value == 0
+                                    ? 0
+                                    : controller.todayCompletedTask.value /
+                                        controller.totalTodayTask.value,
+                                // semanticsLabel: "50%",
+                                // semanticsValue: "50%",
+                              ),
                             ),
                           ),
                         ],
@@ -110,7 +117,10 @@ class MainView extends GetView<MainController> {
                 TextButton(
                   onPressed: () {
                     // Get.to(()=>CategoryDetailsPage(category: "All", taskList: controller.taskList));
-                    Get.toNamed('./category-details', arguments: {'category':"All", 'taskList':controller.taskList});
+                    Get.toNamed('./category-details', arguments: {
+                      'category': "All",
+                      'taskList': controller.taskList
+                    });
                   },
                   child: const Text(
                     "See All",
@@ -130,7 +140,6 @@ class MainView extends GetView<MainController> {
                     dragStartBehavior: DragStartBehavior.down,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     itemBuilder: (context, index) {
-
                       return Card(
                         child: ListTile(
                           onTap: () {
@@ -141,8 +150,10 @@ class MainView extends GetView<MainController> {
                             //         .todayTaskList[index].values.first));
 
                             Get.toNamed('./category-details', arguments: {
-                              'category': controller.todayTaskList[index].keys.first,
-                              'taskList': controller.todayTaskList[index].values.first
+                              'category':
+                                  controller.todayTaskList[index].keys.first,
+                              'taskList':
+                                  controller.todayTaskList[index].values.first
                             });
                           },
                           title:

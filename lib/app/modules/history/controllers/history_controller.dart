@@ -1,23 +1,38 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:ticmind/app/core/local_db/task_hive_model.dart';
+import 'package:ticmind/app/modules/main/controllers/main_controller.dart';
 
 class HistoryController extends GetxController {
-  //TODO: Implement HistoryController
+  MainController mainController = Get.find<MainController>();
 
-  final count = 0.obs;
+  List<TaskModel> completedTaskList = [];
+  var taskBox;
+
   @override
-  void onInit() {
+  void onInit() async {
+    fetchCompletedTask();
+    taskBox = await Hive.openBox('taskBox');
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void fetchCompletedTask() {
+    completedTaskList.clear();
+    for (TaskModel task in mainController.taskList) {
+      if (task.isCompleted) {
+        completedTaskList.add(task);
+      }
+    }
   }
 
-  @override
-  void onClose() {
-    super.onClose();
+  void deleteTask({required TaskModel task}) {
+    taskBox.delete(task.uuid);
+    completedTaskList.remove(task);
+    mainController.taskList.remove(task);
+    Get.back();
+    update();
+    Get.snackbar("Deleted", "${task.taskName} deleted",
+        backgroundColor: Colors.redAccent, snackPosition: SnackPosition.BOTTOM);
   }
-
-  void increment() => count.value++;
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 // import 'package:ticmind/app/modules/createTask/models/task_model.dart';
@@ -7,6 +9,7 @@ class MainController extends GetxController {
   List<TaskModel> taskList = [];
   List<Map<String, List<TaskModel>>> todayTaskList = [];
   RxInt totalTodayTask=0.obs;
+  RxInt todayCompletedTask=0.obs;
 
   late var taskBox;
   @override
@@ -31,26 +34,36 @@ class MainController extends GetxController {
   }
 
   Future<void> fetchtask() async {
+    // log("fetch task called");
+    taskList.clear();
     var data = await taskBox.values.toList();
+    // log(await taskBox.keys.toList().toString());
     for (TaskModel element in data) {
       taskList.add(element);
     }
+    // log(data.length.toString());
+
     update();
   }
 
   void loadTodayTask() {
     totalTodayTask.value=0;
+    todayCompletedTask.value=0;
     todayTaskList.clear();
     DateTime today = DateTime.parse(DateTime.now().toString().split(" ")[0]);
     for (TaskModel task in taskList) {
       // log(task.dueDate.toString());
       if (task.dueDate == today) {
         totalTodayTask.value++;
+        if(task.isCompleted){
+          log('completed task $task');
+          todayCompletedTask.value++;
+        }
 
         bool isCategoryExist = false;
 
         Map<String, List<TaskModel>> value = {};
-        
+
         for (Map<String, List<TaskModel>> element in todayTaskList) {
           if (element.keys.first == task.category) {
             isCategoryExist = true;
