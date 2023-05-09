@@ -67,12 +67,9 @@ class CreateTaskController extends GetxController {
 
   @override
   void onClose() {
-    // TODO: implement onClose
-    // to free up space
-    isUpdate ? null : Hive.box('taskBox').compact();
+    Hive.box('taskBox').compact();
     Hive.box('category').compact();
-    // close all the open boxes before closing the page.
-    isUpdate ? null : Hive.close();
+
     taskNameController.dispose();
     dateController.dispose();
     descriptionController.dispose();
@@ -93,6 +90,7 @@ class CreateTaskController extends GetxController {
     mainController.update();
     // set notification
     int id = int.parse(task.uuid!.split('-').first.numericOnly(), radix: 10);
+
     String formated24HourTime = convertTimeTo24HourFormat(task.startTime);
     DateTime notificationTime = task.dueDate.copyWith(
         hour: int.parse(formated24HourTime.split(':').first),
@@ -103,7 +101,7 @@ class CreateTaskController extends GetxController {
         time: notificationTime,
         id: id);
 
-        log("notification scheduled at $notificationTime");
+    log("notification scheduled at $notificationTime");
     Get.back();
   }
 
@@ -174,5 +172,50 @@ class CreateTaskController extends GetxController {
     }
     // log(categoryBox.keys.toString());
     // log(categoryBox.values.toString());
+  }
+
+  validateStartTime() {
+    var time = convertTimeTo24HourFormat(startTimeController.text).split(":");
+    var now = DateTime.now();
+    bool conditionForToday =
+        dateController.text == now.toString().split(" ").first;
+    log(conditionForToday.toString());
+    if (conditionForToday) {
+      if (int.parse(time.first) > now.hour) {
+        return null;
+      } else if (int.parse(time.first) < now.hour) {
+        return 'time must be later of currentTime';
+      } else if (int.parse(time.first) == now.hour &&
+          int.parse(time.last) < now.minute) {
+        return 'time must be later of currentTime';
+      }
+    }
+    return null;
+  }
+
+  validateEndTime() {
+    var endTime = convertTimeTo24HourFormat(endTimeController.text).split(":");
+    var startTime =
+        convertTimeTo24HourFormat(startTimeController.text).split(":");
+    var now = DateTime.now();
+    bool conditionForToday =
+        dateController.text == now.toString().split(" ").first;
+    log(conditionForToday.toString());
+    if (conditionForToday) {
+      if (int.parse(endTime.first) < now.hour) {
+        return 'time must be later of currentTime';
+      } else if (int.parse(endTime.first) == now.hour &&
+          int.parse(endTime.last) < now.minute) {
+        return 'time must be later of currentTime';
+      } else if (int.parse(endTime.first) < int.parse(startTime.first)) {
+        return 'endTime must be greater that start time';
+      }
+      return null;
+    }
+    if (int.parse(endTime.first) < int.parse(startTime.first)) {
+      return 'endTime must be greater that start time';
+    }
+
+    return null;
   }
 }

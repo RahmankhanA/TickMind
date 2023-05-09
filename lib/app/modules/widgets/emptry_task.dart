@@ -29,7 +29,7 @@ class EmptyTaskWidget extends StatelessWidget {
               ),
             ),
           ),
-          isTextVisible!
+          isTextVisible
               ? const Positioned(
                   bottom: 50,
                   left: 60,

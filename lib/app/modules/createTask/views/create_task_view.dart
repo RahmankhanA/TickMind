@@ -213,7 +213,8 @@ class CreateTaskView extends GetView<CreateTaskController> {
                         return "date is Required";
                       } else if (DateTime.parse(
                               controller.dateController.text.toString())
-                          .isBefore(DateTime.parse(DateTime.now().toString().split(' ').first))) {
+                          .isBefore(DateTime.parse(
+                              DateTime.now().toString().split(' ').first))) {
                         return 'Date must be today or later that day';
                       }
                       return null;
@@ -278,9 +279,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               readOnly: true,
-                              // validator: (value) =>
-                              //     CustomValidation.descriptionValidation(
-                              //         value: value!, fieldName: "description"),
+                              validator: (value)=> controller.validateStartTime(),
                               decoration: InputDecoration(
                                   fillColor:
                                       Theme.of(context).scaffoldBackgroundColor,
@@ -300,6 +299,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                     Icons.keyboard_arrow_down,
                                     color: Theme.of(context).primaryColor,
                                   ),
+                                   errorMaxLines: 3,
                                   hintText: "Start Time"),
                               onTap: () async {
                                 TimeOfDay? pickedTime = await showTimePicker(
@@ -309,6 +309,10 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                 );
 
                                 if (pickedTime != null) {
+                                  // log(DateTime.now()
+                                  //     .add(const Duration(hours: 14))
+                                  //     .hour
+                                  //     .toString());
                                   // ignore: use_build_context_synchronously
                                   controller.startTimeController.text =
                                       pickedTime.format(Get.context!);
@@ -339,6 +343,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
                               readOnly: true,
+                              validator: (value) => controller.validateEndTime(),
                               decoration: InputDecoration(
                                   fillColor:
                                       Theme.of(context).scaffoldBackgroundColor,
@@ -358,6 +363,7 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                     Icons.keyboard_arrow_down,
                                     color: Theme.of(context).primaryColor,
                                   ),
+                                  errorMaxLines: 3,
                                   hintText: "End Time"),
                               onTap: () async {
                                 TimeOfDay? pickedTime = await showTimePicker(

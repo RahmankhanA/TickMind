@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as fz;
@@ -41,7 +43,7 @@ class NotificationService {
       required String body,
       required DateTime time,
       required int id}) async {
-        
+
     NotificationDetails notificationDetails = const NotificationDetails(
         android: AndroidNotificationDetails('chanelId', 'chanelName',
             priority: Priority.high, importance: Importance.max));
@@ -59,6 +61,10 @@ class NotificationService {
       payload: "payload of $title"
     );
     // log("message");
+
+  }
+  void cancelNotification(int id)async{
+   await  _flutterLocalNotificationPlugin.cancel(id);
   }
 
 }
