@@ -3,16 +3,20 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationController extends GetxController {
   User? user;
   final loginFormKey = GlobalKey<FormState>();
+  final forgotPasswordFormKey = GlobalKey<FormState>();
   final signupFormKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController(text: kDebugMode?'abdulrahman13081999@gmail.com':'');
-  TextEditingController passwordController = TextEditingController(text:kDebugMode? 'King=Kong5657':'');
+  TextEditingController emailController = TextEditingController(
+      text: kDebugMode ? 'abdulrahman13081999@gmail.com' : '');
+  TextEditingController passwordController =
+      TextEditingController(text: kDebugMode ? 'King=Kong5656' : '');
   TextEditingController confirmPasswordController = TextEditingController();
   RxBool isLoginPasswordHide = true.obs;
 
@@ -33,7 +37,6 @@ class AuthenticationController extends GetxController {
     update();
   }
 
-
   // Future googleSignIn() async {
   //   final googleUser = await _googleSignIn.signIn();
   //   final googleAuth = await googleUser!.authentication;
@@ -50,7 +53,11 @@ class AuthenticationController extends GetxController {
 
   Future<User?> signInUsingEmailPassword() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-
+    String errorMessage = '';
+    EasyLoading.show(
+      status: 'logging',
+      maskType: EasyLoadingMaskType.black,
+    );
     try {
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
         email: emailController.text,
@@ -60,40 +67,107 @@ class AuthenticationController extends GetxController {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         log('No user found for that email.');
+        errorMessage = 'No user found for that email.';
       } else if (e.code == 'wrong-password') {
         log('Wrong password provided.');
-      }
-      else{
+        errorMessage = 'Wrong password provided.';
+      } else {
+        errorMessage = e.message.toString();
         log(e.toString());
       }
     }
-    print(user);
-    Get.offAllNamed('/home');
+    EasyLoading.dismiss();
+    if (user != null) {
+      Get.snackbar(
+        "Authentication",
+        "You have successfuly logged In",
+        // snackPosition: SnackPosition.BOTTOM,
+      );
+      Get.offAllNamed('/home');
+    } else {
+      Get.snackbar("Authentication", errorMessage,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.redAccent);
+    }
     return user;
   }
 
   Future<User?> registerUsingEmailPassword() async {
-    FirebaseAuth auth = FirebaseAuth.instance;
 
+    String errorMessage = '';
+    EasyLoading.show(
+      status: 'Creating Account',
+      maskType: EasyLoadingMaskType.black,
+    );
     try {
-      UserCredential userCredential = await auth.createUserWithEmailAndPassword(
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
       user = userCredential.user;
       await user?.updateDisplayName(nameController.text);
       await user?.reload();
-      user = auth.currentUser;
+      user = _auth.currentUser;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        errorMessage = 'The password provided is too weak.';
+        log('The password provided is too weak.');
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        log('The account already exists for that email.');
+        errorMessage = 'The account already exists for that email.';
       }
     } catch (e) {
-      print(e);
+      log(e.toString());
+      errorMessage = 'Something went wrong';
     }
-    print(user);
+    EasyLoading.dismiss();
+    if (user != null) {
+      Get.snackbar(
+        "Authentication",
+        "You have successfuly logged In",
+        // snackPosition: SnackPosition.BOTTOM,
+      );
+      signInUsingEmailPassword();
+    } else {
+      Get.snackbar("Authentication", errorMessage,
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.redAccent);
+    }
+
     return user;
+  }
+
+  void ressetPassword() async {
+    String errorMessage = '';
+    EasyLoading.show(
+      status: 'loading ...',
+      maskType: EasyLoadingMaskType.black,
+    );
+    try {
+      await _auth.sendPasswordResetEmail(email: emailController.text);
+    } on FirebaseAuthException catch (error) {
+      errorMessage = error.message.toString();
+    } catch (error) {
+      errorMessage = 'Something went wrong';
+    }
+
+    EasyLoading.dismiss();
+    if (errorMessage == '') {
+      Get.snackbar(
+        "Password Resset",
+        'An email sent to your mail for resseting password',
+        snackPosition: SnackPosition.BOTTOM,
+        // backgroundColor: Colors.redAccent,
+      );
+      // Get.toNamed('./authentication');
+    }else{
+       Get.snackbar(
+        "Password Resset",
+        errorMessage,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+      );
+    }
   }
 }

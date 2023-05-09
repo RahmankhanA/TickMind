@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.rahman" "\0"
-            VALUE "FileDescription", "ticmind" "\0"
+            VALUE "FileDescription", "TickMind" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "ticmind" "\0"
+            VALUE "InternalName", "TickMind" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.rahman. All rights reserved." "\0"
             VALUE "OriginalFilename", "ticmind.exe" "\0"
-            VALUE "ProductName", "ticmind" "\0"
+            VALUE "ProductName", "TickMind" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

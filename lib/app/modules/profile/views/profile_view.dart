@@ -3,6 +3,8 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:ticmind/app/modules/profile/views/edit_profile.dart';
+import 'package:ticmind/app/modules/profile/views/update_password.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../controllers/profile_controller.dart';
@@ -46,7 +48,14 @@ class ProfileView extends GetView<ProfileController> {
                         borderRadius: BorderRadius.circular(100),
                         // color: Colors.blue
                       ),
-                      child: const Icon(Icons.edit),
+                      child: IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () {
+                          Get.to(() => EditProfilePage(
+                                user: controller.user!,
+                              ));
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -54,27 +63,39 @@ class ProfileView extends GetView<ProfileController> {
               const SizedBox(height: 10),
               // Text("ProfileHeading",
               //     style: Theme.of(context).textTheme.headlineMedium),
-              Text("${controller.user?.displayName?.toUpperCase()}",
-                  style: Theme.of(context).textTheme.headlineSmall),
+              GetBuilder(
+                init: controller,
+                initState: (_) {},
+                builder: (_) {
+                  return Text("${controller.user?.displayName?.toUpperCase()}",
+                      style: Theme.of(context).textTheme.headlineSmall);
+                },
+              ),
               const SizedBox(height: 20),
 
               const Divider(),
               const SizedBox(height: 10),
-              const ListTile(
-                title: Text("Edit Profile"),
-                leading: Icon(
+              ListTile(
+                onTap: () {
+                  Get.to(() => EditProfilePage(
+                        user: controller.user!,
+                      ));
+                },
+                title: const Text("Edit Profile"),
+                leading: const Icon(
                   Icons.edit,
                   // color: Colors.red,
                 ),
-                trailing: Icon(Icons.arrow_forward_ios),
+                trailing: const Icon(Icons.arrow_forward_ios),
               ),
-              const ListTile(
-                title: Text("Change Password"),
-                leading: Icon(
+              ListTile(
+                onTap: () => Get.to(() => const UpdatePasswordPage()),
+                title: const Text("Change Password"),
+                leading: const Icon(
                   Icons.lock,
                   // color: Colors.red,
                 ),
-                trailing: Icon(Icons.arrow_forward_ios),
+                trailing: const Icon(Icons.arrow_forward_ios),
               ),
               ListTile(
                 onTap: () {
@@ -122,29 +143,64 @@ class ProfileView extends GetView<ProfileController> {
                 ),
                 trailing: const Icon(Icons.arrow_forward_ios),
               ),
+              // ListTile(
+              //   onTap: () async {
+              //     Uri url = Uri.parse('https://google.com');
+              //     if (await canLaunchUrl(url)) {
+              //       launchUrl(
+              //         url,
+              //       );
+              //     }
+              //   },
+              //   title: const Text("Setting"),
+              //   leading: const Icon(
+              //     Icons.settings,
+              //   ),
+              //   trailing: const Icon(Icons.arrow_forward_ios),
+              // ),
               ListTile(
-                onTap: () async {
-                  Uri url = Uri.parse('https://google.com');
-                  if (await canLaunchUrl(url)) {
-                    launchUrl(
-                      url,
-                    );
-                  }
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text("Logout"),
+                          content:
+                              const Text("Are you sure want to loging out?"),
+                          actions: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  style: OutlinedButton.styleFrom(
+                                      minimumSize: Size(Get.width * 0.3, 40)),
+                                  onPressed: () => Get.back(),
+                                  child: const Text("Cancel"),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                OutlinedButton(
+                                    style: OutlinedButton.styleFrom(
+                                        foregroundColor: Colors.redAccent,
+                                        minimumSize: Size(Get.width * 0.3, 40)),
+                                    onPressed: () {
+                                      controller.logoutUser();
+                                    },
+                                    child: const Text("Yes")),
+                              ],
+                            )
+                          ],
+                        );
+                      });
+                  // controller.logoutUser();
                 },
-                title: const Text("Setting"),
+                title: const Text("Logout"),
                 leading: const Icon(
-                  Icons.settings,
-                  
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios),
-              ),
-              const ListTile(
-                title: Text("Logout"),
-                leading: Icon(
                   Icons.logout,
                   color: Colors.red,
                 ),
-                trailing: Icon(Icons.arrow_forward_ios),
+                trailing: const Icon(Icons.arrow_forward_ios),
               ),
             ],
           ),

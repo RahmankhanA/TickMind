@@ -147,9 +147,9 @@ class HistoryView extends GetView<HistoryController> {
                                             );
                                           },
                                         );
-                                        controller.deleteTask(
-                                            task: controller
-                                                .completedTaskList[index]);
+                                        // controller.deleteTask(
+                                        //     task: controller
+                                        //         .completedTaskList[index]);
                                       },
                                       icon: const Icon(
                                         Icons.delete,

@@ -119,40 +119,64 @@ class CreateTaskView extends GetView<CreateTaskController> {
                                         //         .categoryList[index]);
                                         // },
                                         onLongPress: () {
-                                          log("on long press");
-                                          showMenu(
-                                              context: context,
-                                              shape: BeveledRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                                side: BorderSide(
-                                                    width: 0.2,
-                                                    color: Theme.of(context)
-                                                        .iconTheme
-                                                        .color!),
-                                              ),
-                                              position: RelativeRect.fromLTRB(
-                                                  Get.width * 0.4,
-                                                  Get.height * 0.4,
-                                                  Get.width * 0.4,
-                                                  Get.height * 0.4),
-                                              items: [
-                                                const PopupMenuItem(
-                                                  child: Text("Edit"),
-                                                ),
-                                                PopupMenuItem(
-                                                  child: const Text("Delete"),
-                                                  onTap: () =>
-                                                      controller.deleteCategory(
-                                                          index: index,
-                                                          category: controller
-                                                                  .categoryList[
-                                                              index]),
-                                                ),
-                                                const PopupMenuItem(
-                                                  child: Text("Info"),
-                                                ),
-                                              ]);
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: const Text("Delete"),
+                                                content: Text(
+                                                    "Are you sure want to delete ${controller.categoryList[index]} ?"),
+                                                actions: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      ElevatedButton(
+                                                        style: OutlinedButton
+                                                            .styleFrom(
+                                                                minimumSize: Size(
+                                                                    Get.width *
+                                                                        0.3,
+                                                                    40)),
+                                                        onPressed: () =>
+                                                            Get.back(),
+                                                        child: const Text(
+                                                            "Cancel"),
+                                                      ),
+                                                      const SizedBox(
+                                                        width: 10,
+                                                      ),
+                                                      OutlinedButton(
+                                                          style: OutlinedButton.styleFrom(
+                                                              foregroundColor:
+                                                                  Colors
+                                                                      .redAccent,
+                                                              minimumSize: Size(
+                                                                  Get.width *
+                                                                      0.3,
+                                                                  40)),
+                                                          onPressed: () {
+                                                            controller.deleteCategory(
+                                                                index: index,
+                                                                category: controller
+                                                                        .categoryList[
+                                                                    index]);
+                                                            Get.back();
+                                                          },
+                                                          child: const Text(
+                                                            "Delete",
+                                                            style: TextStyle(
+                                                                // color: Colors
+                                                                //     .redAccent,
+                                                                ),
+                                                          )),
+                                                    ],
+                                                  )
+                                                ],
+                                              );
+                                            },
+                                          );
                                         },
                                         child: Text(
                                           controller.categoryList[index],
@@ -180,9 +204,17 @@ class CreateTaskView extends GetView<CreateTaskController> {
                     controller: controller.dateController,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (value) {
+                      // log(DateTime.parse(
+                      //         controller.dateController.text.toString())
+                      //     .toString());
+                      // log(DateTime.now().toString());
                       if (controller.dateController.text == 'null' ||
                           controller.dateController.text == '') {
                         return "date is Required";
+                      } else if (DateTime.parse(
+                              controller.dateController.text.toString())
+                          .isBefore(DateTime.parse(DateTime.now().toString().split(' ').first))) {
+                        return 'Date must be today or later that day';
                       }
                       return null;
                     },

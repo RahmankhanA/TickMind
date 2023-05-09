@@ -6,7 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ticmind/app/core/local_db/task_hive_model.dart';
 import 'package:ticmind/app/core/local_db/user_hive_model.dart';
 import 'package:ticmind/app/modules/home/controllers/home_controller.dart';
-
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'app/routes/app_pages.dart';
 
 void main() async {
@@ -77,6 +77,24 @@ void main() async {
       debugShowCheckedModeBanner: false,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+      builder: EasyLoading.init(),
     ),
   );
+  configLoading();
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..displayDuration = const Duration(milliseconds: 2000)
+    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..indicatorSize = 45.0
+    ..radius = 10.0
+    ..progressColor = Colors.yellow
+    ..backgroundColor = Colors.green
+    ..indicatorColor = Colors.yellow
+    ..textColor = Colors.yellow
+    ..maskColor = Colors.blue.withOpacity(0.5)
+    ..userInteractions = true
+    ..dismissOnTap = false;
 }

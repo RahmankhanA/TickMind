@@ -15,7 +15,7 @@ class NotificationService {
     InitializationSettings initializationSettings =
         InitializationSettings(android: initializationSettingsAndroid);
     await _flutterLocalNotificationPlugin.initialize(initializationSettings);
-     fz.initializeTimeZones();
+    fz.initializeTimeZones();
     tz.setLocalLocation(
       tz.getLocation(
         await FlutterTimezone
@@ -29,7 +29,11 @@ class NotificationService {
         android: AndroidNotificationDetails('chanelId', 'chanelName',
             priority: Priority.high, importance: Importance.max));
     await _flutterLocalNotificationPlugin.show(
-        12, title, body, notificationDetails);
+      12,
+      title,
+      body,
+      notificationDetails,
+    );
   }
 
   void scheduleNotification(
@@ -37,15 +41,24 @@ class NotificationService {
       required String body,
       required DateTime time,
       required int id}) async {
+        
     NotificationDetails notificationDetails = const NotificationDetails(
         android: AndroidNotificationDetails('chanelId', 'chanelName',
             priority: Priority.high, importance: Importance.max));
 
     //  await _flutterLocalNotificationPlugin.show(12, title, body, notificationDetails);
-    await _flutterLocalNotificationPlugin.zonedSchedule(id, title, body,
-        tz.TZDateTime.from(time, tz.local), notificationDetails,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        androidAllowWhileIdle: true);
+    await _flutterLocalNotificationPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      tz.TZDateTime.from(time, tz.local),
+      notificationDetails,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true,
+      payload: "payload of $title"
+    );
+    // log("message");
   }
+
 }

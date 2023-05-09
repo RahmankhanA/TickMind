@@ -173,7 +173,9 @@ class RegisterView extends GetView<AuthenticationController> {
                           controller.registerUsingEmailPassword();
                         }
                       },
-                      child: const Text("Signup")),
+                      child: const Text("Signup",
+                        style: TextStyle(fontSize: 20),
+                      )),
                 ),
                 const SizedBox(
                   height: 30,

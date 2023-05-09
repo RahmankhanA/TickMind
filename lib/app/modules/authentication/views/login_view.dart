@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ticmind/app/core/custom_validation.dart';
+import 'package:ticmind/app/modules/authentication/views/forgot_password.dart';
 import 'package:ticmind/app/modules/authentication/views/signup_view.dart';
 
 import '../controllers/authentication_controller.dart';
@@ -136,6 +137,22 @@ class LoginView extends GetView<AuthenticationController> {
                   height: 10,
                 ),
                 Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: () => Get.to(() => const ForgotPasswordPage()),
+                    child: const Padding(
+                      padding: EdgeInsets.only(right: 18),
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Align(
                   alignment: Alignment.center,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -146,7 +163,8 @@ class LoginView extends GetView<AuthenticationController> {
                           controller.signInUsingEmailPassword();
                         }
                       },
-                      child: const Text("Login")),
+                      child: const Text("Login",  style: TextStyle(fontSize: 20),
+                      )),
                 ),
                 // const SizedBox(
                 //   height: 10,

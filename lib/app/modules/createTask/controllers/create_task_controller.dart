@@ -92,7 +92,7 @@ class CreateTaskController extends GetxController {
     mainController.loadTodayTask();
     mainController.update();
     // set notification
-    int id = int.parse(task.uuid!.split('-').first, radix: 16);
+    int id = int.parse(task.uuid!.split('-').first.numericOnly(), radix: 10);
     String formated24HourTime = convertTimeTo24HourFormat(task.startTime);
     DateTime notificationTime = task.dueDate.copyWith(
         hour: int.parse(formated24HourTime.split(':').first),
