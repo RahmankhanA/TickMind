@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ticmind/app/modules/widgets/emptry_task.dart';
 
 import '../controllers/main_controller.dart';
 
@@ -135,36 +136,40 @@ class MainView extends GetView<MainController> {
                 init: controller,
                 initState: (_) {},
                 builder: (_) {
-                  return ListView.builder(
-                    itemCount: controller.todayTaskList.length,
-                    dragStartBehavior: DragStartBehavior.down,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        child: ListTile(
-                          onTap: () {
-                            // Get.to(() => CategoryDetailsPage(
-                            //     category:
-                            //         controller.todayTaskList[index].keys.first,
-                            //     taskList: controller
-                            //         .todayTaskList[index].values.first));
+                  return Visibility(
+                    replacement: const EmptyTaskWidget(isTextVisible: true,),
+                    visible: controller.todayTaskList.isNotEmpty,
+                    child: ListView.builder(
+                      itemCount: controller.todayTaskList.length,
+                      dragStartBehavior: DragStartBehavior.down,
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          child: ListTile(
+                            onTap: () {
+                              // Get.to(() => CategoryDetailsPage(
+                              //     category:
+                              //         controller.todayTaskList[index].keys.first,
+                              //     taskList: controller
+                              //         .todayTaskList[index].values.first));
 
-                            Get.toNamed('./category-details', arguments: {
-                              'category':
-                                  controller.todayTaskList[index].keys.first,
-                              'taskList':
-                                  controller.todayTaskList[index].values.first
-                            });
-                          },
-                          title:
-                              Text(controller.todayTaskList[index].keys.first),
-                          subtitle: Text(
-                            "${controller.todayTaskList[index].values.first.first.startTime} - ${controller.todayTaskList[index].values.first.first.endTime}",
+                              Get.toNamed('./category-details', arguments: {
+                                'category':
+                                    controller.todayTaskList[index].keys.first,
+                                'taskList':
+                                    controller.todayTaskList[index].values.first
+                              });
+                            },
+                            title: Text(
+                                controller.todayTaskList[index].keys.first),
+                            subtitle: Text(
+                              "${controller.todayTaskList[index].values.first.first.startTime} - ${controller.todayTaskList[index].values.first.first.endTime}",
+                            ),
+                            trailing: const Icon(Icons.arrow_forward_ios),
                           ),
-                          trailing: const Icon(Icons.arrow_forward_ios),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   );
                 },
               ),

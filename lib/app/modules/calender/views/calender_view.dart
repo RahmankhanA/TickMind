@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
-
+import 'package:ticmind/app/modules/widgets/emptry_task.dart';
 
 import '../controllers/calender_controller.dart';
 
@@ -180,32 +180,34 @@ class CalenderView extends GetView<CalenderController> {
                   init: controller,
                   initState: (_) {},
                   builder: (_) {
-                    return ListView.builder(
-                      itemCount: controller.selectedDayTaskList.length,
-                      itemBuilder: (context, index) {
-                        final task = controller.selectedDayTaskList[index];
-                        return Card(
-                          child: ListTile(
-                            onTap: () {
-                              // Get.to(() => CategoryDetailsPage(
-                              //     category: task.keys.first,
-                              //     taskList: task.values.first));
+                    return Visibility(
+                      replacement: const EmptyTaskWidget(isTextVisible: false),
+                      visible: controller.selectedDayTaskList.isNotEmpty,
+                      child: ListView.builder(
+                        itemCount: controller.selectedDayTaskList.length,
+                        itemBuilder: (context, index) {
+                          final task = controller.selectedDayTaskList[index];
+                          return Card(
+                            child: ListTile(
+                              onTap: () {
+                                // Get.to(() => CategoryDetailsPage(
+                                //     category: task.keys.first,
+                                //     taskList: task.values.first));
 
-Get.toNamed('./category-details', arguments: {
-                                'category':
-                                    task.keys.first,
-                                'taskList':
-                                   task.values.first
-                              });
-                            },
-                            title: Text(task.keys.first),
-                            subtitle: Text(
-                              "${task.values.first.first.startTime} - ${task.values.first.first.endTime}",
+                                Get.toNamed('./category-details', arguments: {
+                                  'category': task.keys.first,
+                                  'taskList': task.values.first
+                                });
+                              },
+                              title: Text(task.keys.first),
+                              subtitle: Text(
+                                "${task.values.first.first.startTime} - ${task.values.first.first.endTime}",
+                              ),
+                              trailing: const Icon(Icons.arrow_forward_ios),
                             ),
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     );
                   },
                 ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ticmind/app/modules/widgets/emptry_task.dart';
 
 import '../controllers/history_controller.dart';
 
@@ -20,11 +21,8 @@ class HistoryView extends GetView<HistoryController> {
           initState: (_) {},
           builder: (_) {
             return controller.completedTaskList.isEmpty
-                ? const Center(
-                    child: Text("There is no completed task", style: TextStyle(
-                      fontSize: 25,
-                    ),),
-                  )
+                ? SizedBox(
+                    height: Get.height * 0.6, child: const EmptyTaskWidget(isTextVisible: true,))
                 : ListView.separated(
                     // controller: controller.scrollController,
                     itemCount: controller.completedTaskList.length,

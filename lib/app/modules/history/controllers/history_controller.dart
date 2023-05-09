@@ -26,10 +26,12 @@ class HistoryController extends GetxController {
     }
   }
 
-  void deleteTask({required TaskModel task}) {
-    taskBox.delete(task.uuid);
+  void deleteTask({required TaskModel task}) async{
+    await taskBox.delete(task.uuid);
     completedTaskList.remove(task);
     mainController.taskList.remove(task);
+    mainController.loadTodayTask();
+    // mainController.todayTaskList.remove(task);
     Get.back();
     update();
     Get.snackbar("Deleted", "${task.taskName} deleted",
