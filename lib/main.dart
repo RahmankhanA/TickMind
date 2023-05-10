@@ -72,7 +72,7 @@ void main() async {
 // themeMode: ThemeMode.system,
 
       // Use dark or light theme based on system setting.
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.dark,
       title: "TickMind",
       debugShowCheckedModeBanner: false,
       initialRoute: AppPages.INITIAL,

@@ -14,15 +14,15 @@ class MainView extends GetView<MainController> {
         title: const Text('Home '),
         // elevation: 5,
         centerTitle: true,
-        actions: const [
-          Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(
-              Icons.notifications_outlined,
-              size: 35,
-            ),
-          )
-        ],
+        // actions: const [
+        //   Padding(
+        //     padding: EdgeInsets.all(8.0),
+        //     child: Icon(
+        //       Icons.notifications_outlined,
+        //       size: 35,
+        //     ),
+        //   )
+        // ],
       ),
       body: SingleChildScrollView(
           child: Padding(

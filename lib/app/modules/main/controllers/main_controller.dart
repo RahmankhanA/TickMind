@@ -56,7 +56,7 @@ class MainController extends GetxController {
       if (task.dueDate == today) {
         totalTodayTask.value++;
         if(task.isCompleted){
-          log('completed task $task');
+        
           todayCompletedTask.value++;
         }
 

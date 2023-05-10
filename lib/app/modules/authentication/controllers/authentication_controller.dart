@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
@@ -13,10 +12,12 @@ class AuthenticationController extends GetxController {
   final forgotPasswordFormKey = GlobalKey<FormState>();
   final signupFormKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController(
-      text: kDebugMode ? 'abdulrahman13081999@gmail.com' : '');
-  TextEditingController passwordController =
-      TextEditingController(text: kDebugMode ? 'King=Kong5656' : '');
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  // TextEditingController emailController = TextEditingController(
+  //     text: kDebugMode ? 'abdulrahman13081999@gmail.com' : '');
+  // TextEditingController passwordController =
+  //     TextEditingController(text: kDebugMode ? 'King=Kong5656' : '');
   TextEditingController confirmPasswordController = TextEditingController();
   RxBool isLoginPasswordHide = true.obs;
 
@@ -93,7 +94,6 @@ class AuthenticationController extends GetxController {
   }
 
   Future<User?> registerUsingEmailPassword() async {
-
     String errorMessage = '';
     EasyLoading.show(
       status: 'Creating Account',
@@ -161,8 +161,8 @@ class AuthenticationController extends GetxController {
         // backgroundColor: Colors.redAccent,
       );
       // Get.toNamed('./authentication');
-    }else{
-       Get.snackbar(
+    } else {
+      Get.snackbar(
         "Password Resset",
         errorMessage,
         snackPosition: SnackPosition.BOTTOM,

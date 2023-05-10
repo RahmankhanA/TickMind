@@ -115,7 +115,7 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
                                       style: TextStyle(fontSize: 20),
                                     ),
                                     Text(
-                                      "${controller.taskListDuplicate[index].startTime} - ${controller.taskListDuplicate[index].startTime}",
+                                      "${controller.taskListDuplicate[index].startTime} - ${controller.taskListDuplicate[index].endTime}",
                                       style: const TextStyle(fontSize: 16),
                                     ),
                                   ],
@@ -168,10 +168,18 @@ class CategoryDetailsView extends GetView<CategoryDetailsController> {
                                         style: OutlinedButton.styleFrom(
                                             minimumSize:
                                                 Size(Get.width * 0.4, 40)),
-                                        onPressed:controller.taskListDuplicate[index]
-                                                  .isCompleted?null: () {
-                                          Get.toNamed('./create-task', arguments: {'task':controller.taskListDuplicate[index]});
-                                        },
+                                        onPressed: controller
+                                                .taskListDuplicate[index]
+                                                .isCompleted
+                                            ? null
+                                            : () {
+                                                Get.toNamed('./create-task',
+                                                    arguments: {
+                                                      'task': controller
+                                                              .taskListDuplicate[
+                                                          index]
+                                                    });
+                                              },
                                         icon: const Icon(Icons.edit),
                                         label: const Text(
                                           "Edit Task",

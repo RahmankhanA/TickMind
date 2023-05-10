@@ -11,7 +11,7 @@ class CategoryDetailsController extends GetxController {
   String category = '';
   List<TaskModel> taskList = [];
   List<TaskModel> taskListDuplicate = [];
-  MainController mainController=Get.find<MainController>();
+  MainController mainController = Get.find<MainController>();
 
   bool isSearchBarVisible = true;
 
@@ -24,12 +24,13 @@ class CategoryDetailsController extends GetxController {
     category = Get.arguments['category'];
     taskList = Get.arguments['taskList'];
     taskListDuplicate = [...taskList];
+    sortTask();
     taskBox = await Hive.openBox('taskBox');
     super.onInit();
   }
 
   @override
-  void onDispose() {
+  void onClose() {
     scrollController.dispose();
     super.dispose();
   }
@@ -72,7 +73,6 @@ class CategoryDetailsController extends GetxController {
     await taskBox.put(data.uuid, data);
     await mainController.fetchtask();
     mainController.loadTodayTask();
-
   }
 
   void unCompleteTask({required int index}) async {
@@ -82,7 +82,9 @@ class CategoryDetailsController extends GetxController {
     taskList[newIndex].isCompleted = false;
     update();
     await taskBox.put(data.uuid, data);
-   await  mainController.fetchtask();
+    await mainController.fetchtask();
     mainController.loadTodayTask();
   }
+
+  void sortTask() {}
 }

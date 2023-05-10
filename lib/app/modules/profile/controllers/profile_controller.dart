@@ -60,6 +60,7 @@ class ProfileController extends GetxController {
       log("Showing success");
       // Get.offAllNamed('./home');
       // Get.back();
+      user=firebaseAuth.currentUser;
       update();
       return;
     } else {
@@ -80,6 +81,7 @@ class ProfileController extends GetxController {
       status: 'Updating Profile',
       maskType: EasyLoadingMaskType.black,
     );
+    
     await firebaseAuth.signOut();
     EasyLoading.dismiss();
     Get.snackbar(
