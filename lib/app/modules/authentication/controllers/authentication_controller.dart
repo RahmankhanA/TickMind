@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthenticationController extends GetxController {
   User? user;
@@ -21,7 +20,7 @@ class AuthenticationController extends GetxController {
   TextEditingController confirmPasswordController = TextEditingController();
   RxBool isLoginPasswordHide = true.obs;
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+// SignIn _googleSignIn = GoogleSignIn();  final Google
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override

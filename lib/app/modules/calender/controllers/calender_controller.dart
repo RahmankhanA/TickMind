@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:ticmind/app/core/local_db/task_hive_model.dart';
 import 'package:ticmind/app/modules/main/controllers/main_controller.dart';
@@ -8,7 +6,7 @@ class CalenderController extends GetxController {
   DateTime selectedDay = DateTime.now();
   MainController mainController = Get.find<MainController>();
   List<Map<String, List<TaskModel>>> selectedDayTaskList = [];
-  List<DateTime> taskDayList=[]; // day where task is added
+  List<DateTime> taskDayList = []; // day where task is added
 
   @override
   void onInit() {

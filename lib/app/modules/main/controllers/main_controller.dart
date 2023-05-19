@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 // import 'package:ticmind/app/modules/createTask/models/task_model.dart';
@@ -56,7 +54,7 @@ class MainController extends GetxController {
       if (task.dueDate == today) {
         totalTodayTask.value++;
         if(task.isCompleted){
-        
+
           todayCompletedTask.value++;
         }
 
